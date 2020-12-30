@@ -5,9 +5,18 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require("../middelwares/auth");
 //Always use Async and Await
-router.get("/", (req, res) => {
-  res.send("Get Logged in User");
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
 });
 
 router.post(
