@@ -1,6 +1,13 @@
 const express = require("express");
+const { connect } = require("mongoose");
+const connectDB = require("./config/db");
 let app = express();
 const PORT = process.env.PORT || 5000;
+//Init Middleware
+app.use(express.json({ extended: false}))
+//connect DataBase
+connectDB();
+
 app.get("/", (req, res)=>{
     res.json({
         "message": "Hello World"
